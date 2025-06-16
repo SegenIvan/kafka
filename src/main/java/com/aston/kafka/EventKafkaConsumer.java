@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class EventHandler {
+public class EventKafkaConsumer {
     private final NotificationService emailService;
     private final ObjectMapper objectMapper;
 

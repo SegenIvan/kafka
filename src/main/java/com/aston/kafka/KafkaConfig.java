@@ -9,29 +9,14 @@ import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
 @Configuration
-public class Config {
+public class KafkaConfig {
     @Value("${spring.kafka.bootstrap-servers}")
     private String server;
-
-    @Value("${spring.mail.host}")
-    private String mailHost;
-
-    @Value("${spring.mail.port}")
-    private int mailPort;
-
-    @Value("${spring.mail.username}")
-    private String mailUsername;
-
-    @Value("${spring.mail.password}")
-    private String mailPassword;
 
     @Bean
     public ConsumerFactory<String, String> userEventConsumerFactory() {
@@ -50,22 +35,5 @@ public class Config {
                 new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(userEventConsumerFactory());
         return factory;
-    }
-
-    @Bean
-    public JavaMailSender javaMailSender() {
-        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-        mailSender.setHost(mailHost);
-        mailSender.setPort(mailPort);
-        mailSender.setUsername(mailUsername);
-        mailSender.setPassword(mailPassword);
-
-        Properties props = mailSender.getJavaMailProperties();
-        props.put("mail.transport.protocol", "smtp");
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.starttls.enable", "true");
-        props.put("mail.debug", "true");
-
-        return mailSender;
     }
 }
